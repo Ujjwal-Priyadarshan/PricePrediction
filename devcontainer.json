@@ -1,0 +1,19 @@
+{
+  "name": "Terraform AWS Dev Container",
+  "build": {
+    "context": "..",
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "hashicorp.terraform",
+        "amazonwebservices.aws-toolkit-vscode",
+        "ms-toolsai.jupyter"
+      ] 
+    }
+  },
+  "forwardPorts": [8888],
+  "postCreateCommand": "terraform --version && aws --version && zip --version && jupyter --version",
+  "remoteUser": "vscode"
+}
