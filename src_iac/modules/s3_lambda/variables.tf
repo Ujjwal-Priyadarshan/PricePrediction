@@ -18,9 +18,17 @@ variable "lambda_handler" {
 
 variable "lambda_runtime" {
   type    = string
-  default = "python3.9"
+  default = "python3.10"
 }
 
 variable "lambda_role_arn" {
   type = string
+}
+
+variable "lambda_role_name" {
+  type = string
+}
+
+variable "lambda_layers_arn" {
+  type = list(string)
 }

@@ -9,11 +9,16 @@
       "extensions": [
         "hashicorp.terraform",
         "amazonwebservices.aws-toolkit-vscode",
-        "ms-toolsai.jupyter"
+        "ms-toolsai.jupyter",
+        "ms-python.vscode-python-envs",
+        "ms-python.debugpy",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "cweijan.vscode-office"
       ] 
     }
   },
   "forwardPorts": [8888],
-  "postCreateCommand": "terraform --version && aws --version && zip --version && jupyter --version",
+  "postCreateCommand": "terraform --version && aws --version && zip --version",
   "remoteUser": "vscode"
 }

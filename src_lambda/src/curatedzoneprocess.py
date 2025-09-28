@@ -1,7 +1,8 @@
 
 import boto3
 import pandas as pd
-from sklearn.linear_model import LinearRegression
+
+
 import io
 
 def handler(event, context):
@@ -18,8 +19,19 @@ def handler(event, context):
         response = s3_client.get_object(Bucket=bucket_name, Key=object_key)
         csv_content = response['Body'].read()
 
+        print(f"read csv_content {len(csv_content)}")
+
         # Load CSV into a Pandas DataFrame
         df = pd.read_csv(io.BytesIO(csv_content))
+
+        selected_columns = ['CarName', 'fueltype', 'aspiration', 'doornumber', 'carbody', 'drivewheel', 'enginelocation', 'carheight', 'curbweight', 'cylindernumber', 'enginesize', 'compressionratio', 'horsepower', 'peakrpm', 'citympg', 'highwaympg', 'Price']
+        df = df[selected_columns]
+        features = ['CarName', 'fueltype', 'aspiration', 'doornumber', 'carbody', 'drivewheel', 'enginelocation', 'carheight', 'curbweight', 'cylindernumber', 'enginesize', 'compressionratio', 'horsepower', 'peakrpm', 'citympg', 'highwaympg']
+        target = ['Price']
+
+        categorical_features = ['CarName', 'fueltype', 'aspiration', 'doornumber', 'carbody', 'drivewheel', 'enginelocation']
+        numeric_features = ['carheight', 'curbweight', 'cylindernumber', 'enginesize', 'compressionratio', 'horsepower', 'peakrpm', 'citympg', 'highwaympg']
+
 
         return {
             'statusCode': 200,
