@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.8 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.8" pages="2">
   <diagram name="Demo" id="C6uBVzHvEq-UzsvP1SKt">
-    <mxGraphModel dx="1420" dy="822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="824" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -37,8 +37,14 @@
         <mxCell id="0FQ1X4St2KFv3-fqBpn6-6" value="Curated Zone&lt;div&gt;(ujp.curated.zone)&lt;/div&gt;" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#7AA116;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.file_cache_s3_linked_datasets;" parent="1" vertex="1">
           <mxGeometry x="395" y="68" width="80" height="80" as="geometry" />
         </mxCell>
+        <mxCell id="9MDDYbsUEdsClmdgug1l-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="0FQ1X4St2KFv3-fqBpn6-9" target="9MDDYbsUEdsClmdgug1l-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="0FQ1X4St2KFv3-fqBpn6-9" value="ModelTraining&lt;div&gt;(curatedzoneprocess)&lt;/div&gt;" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#ED7100;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.lambda_function;" parent="1" vertex="1">
           <mxGeometry x="570" y="60" width="88" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="9MDDYbsUEdsClmdgug1l-1" value="targetZone&lt;div&gt;(ujp.target.zone)&lt;/div&gt;" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#7AA116;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.file_cache_s3_linked_datasets;" vertex="1" parent="1">
+          <mxGeometry x="710" y="64" width="80" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

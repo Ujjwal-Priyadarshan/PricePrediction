@@ -1,0 +1,11 @@
+# Dockerfile
+FROM public.ecr.aws/lambda/python:3.10
+
+# Copy function code
+COPY src/landingzoneprocess.py ${LAMBDA_TASK_ROOT}
+COPY requirements.landing.txt ${LAMBDA_TASK_ROOT}
+RUN pip install --no-cache-dir -r requirements.landing.txt
+
+
+# Set the CMD to your handler
+CMD ["landingzoneprocess.handler"]

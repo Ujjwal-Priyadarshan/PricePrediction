@@ -2,11 +2,9 @@
 
 Simple Approach: as per the given instructions.
 
-The lamdba functions are performing data clean up. we are not running the model training routing as these will bloat up the binary footprint of lambda function beyond 250MB limit and we are not using container based functions in this POC.
+The lamdba functions are performing data clean up. and cleaned dataset is placed in curated zone. further model training routine will perform training of model and save the model in target zone.
 
-> NOTE: The model training is supported in jupiter notebook placed in the source.
-
-![1758996235478](image/readme/1758996235478.png)
+![1759181040253](image/readme/1759181040253.png)
 
 ## Proposed approach
 
@@ -48,9 +46,7 @@ I have limited this poc to not involve container based lamda's this limits to th
 | **Neural Networks**     | Good for large datasets with complex feature interactions           |
 | **KNN Regression**      | Simple, non-parametric, good for small datasets with local patterns |
 
-> NOTE: we tested with Linear Regression and then switched to Random Forest as it showed improvment however, the data set is too small and includes data ranges that are very large to achieve good performance.	
-
-
+> NOTE: we tested with Linear Regression and then switched to Random Forest as it showed improvment however, the data set is too small and includes data ranges that are very large to achieve good performance.
 
 #### Error observation
 
@@ -69,7 +65,6 @@ max= 5447.601166666664
 min = -7881.324999999997
 standard deviation = 2715.4256554882772
 ```
-
 
 # Build and Deploy Steps:
 
@@ -149,4 +144,48 @@ S3 Put event as below:
     }
   ]
 }
+```
+
+curated lambda test data
+
+```
+{
+  "Records": [
+    {
+      "eventVersion": "2.0",
+      "eventSource": "aws:s3",
+      "awsRegion": "us-east-1",
+      "eventTime": "1970-01-01T00:00:00.000Z",
+      "eventName": "ObjectCreated:Put",
+      "userIdentity": {
+        "principalId": "EXAMPLE"
+      },
+      "requestParameters": {
+        "sourceIPAddress": "127.0.0.1"
+      },
+      "responseElements": {
+        "x-amz-request-id": "EXAMPLE123456789",
+        "x-amz-id-2": "EXAMPLE123/5678abcdefghijklambdaisawesome/mnopqrstuvwxyzABCDEFGH"
+      },
+      "s3": {
+        "s3SchemaVersion": "1.0",
+        "configurationId": "testConfigRule",
+        "bucket": {
+          "name": "ujp.curated.zone",
+          "ownerIdentity": {
+            "principalId": "EXAMPLE"
+          },
+          "arn": "arn:aws:s3:::ujp.curated.zone"
+        },
+        "object": {
+          "key": "curated_sample.csv",
+          "size": 1024,
+          "eTag": "0123456789abcdef0123456789abcdef",
+          "sequencer": "0A1B2C3D4E5F678901"
+        }
+      }
+    }
+  ]
+}
+
 ```

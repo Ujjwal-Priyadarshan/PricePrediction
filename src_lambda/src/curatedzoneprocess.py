@@ -1,7 +1,17 @@
 
 import boto3
 import pandas as pd
-
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder
+import joblib
+import numpy as np
 
 import io
 
@@ -29,9 +39,57 @@ def handler(event, context):
         features = ['CarName', 'fueltype', 'aspiration', 'doornumber', 'carbody', 'drivewheel', 'enginelocation', 'carheight', 'curbweight', 'cylindernumber', 'enginesize', 'compressionratio', 'horsepower', 'peakrpm', 'citympg', 'highwaympg']
         target = ['Price']
 
+        x = df[features]
+        y = df[target]
+
         categorical_features = ['CarName', 'fueltype', 'aspiration', 'doornumber', 'carbody', 'drivewheel', 'enginelocation']
         numeric_features = ['carheight', 'curbweight', 'cylindernumber', 'enginesize', 'compressionratio', 'horsepower', 'peakrpm', 'citympg', 'highwaympg']
 
+        print("setting up imputers and transformers")
+        categorical_imputer = SimpleImputer(strategy='most_frequent')
+        numeric_imputer = SimpleImputer(strategy='mean')
+        preprocessor = ColumnTransformer(transformers=[
+            ('cat', Pipeline([
+                ('imputer', categorical_imputer),
+                ('encoder', OneHotEncoder(handle_unknown='ignore'))
+            ]), categorical_features),
+            ('num', numeric_imputer, numeric_features)
+        ])
+
+        print("setting up the pipeline")
+        pipeline = Pipeline(steps=[
+            ('preprocessor', preprocessor),
+            # ('regressor', LinearRegression())
+            ('RandomForest', RandomForestRegressor(random_state=42))
+        ])
+
+        # Train-test split and train
+        print("splitting up the test and train data")
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.1, random_state=42)
+
+        print("training the model")
+        pipeline.fit(x_train, y_train)
+
+        # Predict and evaluate
+        print("testing the model")
+        y_pred = pipeline.predict(x_test)
+        mse = mean_squared_error(y_test, y_pred)
+
+        # Output results
+        print("Predicted Prices:", y_pred)
+        print("Mean Squared Error:", mse)
+
+        # Error analysis
+        y_test = np.array(y_test)
+        y_pred = np.array(y_pred)
+        diff  = y_test - y_pred
+        print(f" mean = {diff.mean()} \n max= {diff.max()} \n min = {diff.min()} \n standard deviation = {diff.std()}")
+
+        #serialize and save the model for reuse
+        temp_path = "/tmp/model.priceprediction.pkl"
+        joblib.dump(pipeline, temp_path)
+
+        s3_client.upload_file(temp_path, "ujp.target.zone", "models/model.priceprediction.pkl")
 
         return {
             'statusCode': 200,
