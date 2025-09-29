@@ -23,19 +23,65 @@ def handler(event, context):
 
         # Load CSV into a Pandas DataFrame
         df = pd.read_csv(io.BytesIO(csv_content))
-        print(f"drop duplicate records")
-        df = df.drop_duplicates()
 
-        selected_columns = ['CarName', 'fueltype', 'aspiration', 'doornumber', 'carbody', 'drivewheel', 'enginelocation', 'carheight', 'curbweight', 'carlength', 'cylindernumber', 'enginesize', 'compressionratio', 'horsepower', 'peakrpm', 'citympg', 'highwaympg', 'Price']
-        df = df.drop_duplicates(selected_columns, keep=False)
+        # process: remove unwanted columns
+        columns = [
+        'CarName',
+        'fueltype',
+        'aspiration',
+        'doornumber',
+        'carbody',
+        'drivewheel',
+        'enginelocation',
+        'wheelbase',
+        'color',
+        'carlength',
+        'carwidth',
+        'carheight',
+        'curbweight',
+        'cylindernumber',
+        'enginesize',
+        'compressionratio',
+        'horsepower',
+        'peakrpm',
+        'citympg',
+        'highwaympg',
+        'Price']
 
-        print(f"drop rows with nulls/NaN")
-        df = df.dropna(subset=selected_columns)
-        
-        print(f"sort by price")
-        df = df.sort_values(by='Price', ascending=True)
+        df = df[columns]
+        # process: remove high cardinality columns to avoid risk of encoding complexity and overfitting.
+        df.drop('CarName', axis=1, inplace=True)
 
-        print(f"dataframe read by pd {df.head()}")
+        # process: replace numeric NaN's to median()
+        numeric_feature_columns = [
+        'wheelbase',
+        'carlength',
+        'carwidth',
+        'carheight',
+        'curbweight',
+        'cylindernumber',
+        'enginesize',
+        'compressionratio',
+        'horsepower',
+        'peakrpm',
+        'citympg',
+        'highwaympg']
+
+        for col in numeric_feature_columns:
+            df[col] = df[col].fillna(df[col].median())
+
+        category_columns = [
+        'fueltype',
+        'aspiration',
+        'doornumber',
+        'carbody',
+        'drivewheel',
+        'enginelocation',
+        'color'
+        ]
+
+        for col in category_columns:
+            df[col] = df[col].fillna(df[col].mode()[0])
 
         csv_buffer = io.StringIO()
         df.to_csv(csv_buffer, index=False)

@@ -23,7 +23,7 @@ Scope: This could be further improved by involving workflow using Step Functions
 
 ### Current design
 
-I have limited this poc to not involve container based lamda's this limits to the total slze of a lambda to be below 250MB mark. introducing more libraries like the ML capabilities are challenging. However, since the project requirements did not demand that. we are good. however, just to be aware this would require containers based approach. However, since building such long running processes in lambda is not adviced the Proposed approach is recommended.
+~~I have limited this poc to not involve container based lamda's this limits to the total slze of a lambda to be below 250MB mark. introducing more libraries like the ML capabilities are challenging. However, since the project requirements did not demand that. we are good.~~ however, just to be aware this would require containers based approach. However, since building such long running processes in lambda is not adviced the Proposed approach is recommended.
 
 ### Linear Regression
 
@@ -66,29 +66,29 @@ min = -7881.324999999997
 standard deviation = 2715.4256554882772
 ```
 
-# Build and Deploy Steps:
+# Build and Deploy
 
 we have a helper shell script build.sh that will perform the following:
 
-cd src_lambda
-
 ```
-./build.sh landing --> generates lambda package for landing zone process
-./build.sh curated --> generates lambda package for curated zone process
-
+./deploy.sh publish --> this will build the lambda container, push them to ecr, execute the iac terraform apply to deploy the 3 s3 buckets and 2 lambda functions with all policies and permission required. 
+./deploy.sh cleanup --> cleans up every thing that was published (zero footprint)
 ```
 
-Run terraform commands to deploy
+# How to use
 
-cd src_ioc
-
-this assumes you have `aws configure` successfully
+Once successfully deployed, reach out to the S3 bucket
 
 ```
-terraform init
-terraform plan
-terraform apply
-terraform destroy
+aws s3 cp ./data/sample_data.csv s3://ujp.landing.zone
+```
+
+Verify the results:
+
+it could take a few seconds (less than a minute) to find the model being generated for reuse.
+
+```
+aws s3 ls s3://ujp.target.zone
 ```
 
 # Test
